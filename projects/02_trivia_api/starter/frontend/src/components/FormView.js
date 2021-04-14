@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-
+import { BASIC_URL } from '../constants';
 import '../stylesheets/FormView.css';
 
 class FormView extends Component {
@@ -17,7 +17,7 @@ class FormView extends Component {
 
   componentDidMount(){
     $.ajax({
-      url: `/categories`, //TODO: update request URL
+      url: `${BASIC_URL}/categories`, //TODO: update request URL
       type: "GET",
       success: (result) => {
         this.setState({ categories: result.categories })
