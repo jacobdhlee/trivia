@@ -4,6 +4,8 @@ import '../stylesheets/App.css';
 import Question from './Question';
 import Search from './Search';
 import $ from 'jquery';
+import { BASIC_URL } from '../constants';
+
 
 class QuestionView extends Component {
   constructor(){
@@ -23,7 +25,7 @@ class QuestionView extends Component {
 
   getQuestions = () => {
     $.ajax({
-      url: `/questions?page=${this.state.page}`, //TODO: update request URL
+      url: `${BASIC_URL}/questions?page=${this.state.page}`, //TODO: update request URL
       type: "GET",
       success: (result) => {
         this.setState({
@@ -34,6 +36,7 @@ class QuestionView extends Component {
         return;
       },
       error: (error) => {
+        console.log('err ', error)
         alert('Unable to load questions. Please try your request again')
         return;
       }
