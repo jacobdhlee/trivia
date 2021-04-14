@@ -143,8 +143,8 @@ def create_app(test_config=None):
             formatted_questions = pagination_questions(request, questions)
             return jsonify({
                 'questions': formatted_questions,
-                'totalQuestions': len(formatted_questions),
-                'currentCategory': None
+                'total_questions': len(questions),
+                'current_category': None
             })
         except:
             abort(422)
