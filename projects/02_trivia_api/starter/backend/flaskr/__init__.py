@@ -52,10 +52,12 @@ def create_app(test_config=None):
     Clicking on the page numbers should update the questions.
   '''
   #should do testing
-  @app.route('/questions', methods=['GET'])
+  @app.route('/questions', methods=['GET', 'POST'])
   def questions():
     if request.method == 'GET':
       return get_questions(request)
+    else:
+      return post_questions(request)
 
   def get_questions(request):
     all_questions = Question.query.all()
@@ -79,17 +81,34 @@ def create_app(test_config=None):
   # This removal will persist in the database and when you refresh the page.
   # '''
   #
-  # '''
-  # @TODO:
-  # Create an endpoint to POST a new question,
-  # which will require the question and answer text,
-  # category, and difficulty score.
-  #
-  # TEST: When you submit a question on the "Add" tab,
-  # the form will clear and the question will appear at the end of the last page
-  # of the questions list in the "List" tab.
-  # '''
-  #
+  '''
+  @TODO:
+  Create an endpoint to POST a new question,
+  which will require the question and answer text,
+  category, and difficulty score.
+
+  TEST: When you submit a question on the "Add" tab,
+  the form will clear and the question will appear at the end of the last page
+  of the questions list in the "List" tab.
+  '''
+  def post_questions(request):
+    body = request.get_json()
+    print(body)
+    if body['question'] == '' or body['answer'] == '':
+      abort(422)
+    else:
+      try:
+        new_question = Question(
+          question=body['question'],
+          answer=body['answer'],
+          category=body['category'],
+          difficulty=body['difficulty'],
+        )
+        new_question.insert()
+        return jsonify({'success': True})
+      except:
+        abort(422)
+
   # '''
   # @TODO:
   # Create a POST endpoint to get questions based on a search term.
