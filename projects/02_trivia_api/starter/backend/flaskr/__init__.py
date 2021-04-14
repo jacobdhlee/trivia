@@ -25,11 +25,19 @@ def create_app(test_config=None):
     resp.headers.add('Access-Control-Allow-Headers', 'Content-Type')
     resp.headers.add('Access-Control-Allow-Headers', 'GET, POST, PATCH, DELETE, OPTION')
     return resp
+
   '''
   @TODO: 
   Create an endpoint to handle GET requests 
   for all available categories.
   '''
+
+  def pagination_questions(request, questions):
+    page = request.args.get('page', 1, type=int)
+    start = (page - 1) * QUESTIONS_PER_PAGE
+    end = start + QUESTIONS_PER_PAGE
+    formatted_questions = [q.format() for q in questions]
+    return formatted_questions[start:end]
 
   '''
     @TODO:
@@ -44,26 +52,21 @@ def create_app(test_config=None):
     Clicking on the page numbers should update the questions.
   '''
   #should do testing
-
   @app.route('/questions', methods=['GET'])
   def questions():
     if request.method == 'GET':
       return get_questions(request)
 
   def get_questions(request):
-    page = request.args.get('page', 1, type=int)
-    start = (page - 1) * QUESTIONS_PER_PAGE
-    end = start + QUESTIONS_PER_PAGE
     all_questions = Question.query.all()
-    formatted_questions = [q.format() for q in all_questions]
-
+    formatted_questions = pagination_questions(request, all_questions)
     all_category = Category.query.all()
     formatted_category = {c.id: c.type for c in all_category}
     print(formatted_category)
 
     return jsonify({
       "questions": formatted_questions,
-      "total_questions": len(formatted_questions),
+      "total_questions": len(all_questions),
       "categories": formatted_category,
       "current_category": None
     })
@@ -98,15 +101,23 @@ def create_app(test_config=None):
   # Try using the word "title" to start.
   # '''
   #
-  # '''
-  # @TODO:
-  # Create a GET endpoint to get questions based on category.
-  #
-  # TEST: In the "List" tab / main screen, clicking on one of the
-  # categories in the left column will cause only questions of that
-  # category to be shown.
-  # '''
-  #
+  '''
+  @TODO:
+  Create a GET endpoint to get questions based on category.
+
+  TEST: In the "List" tab / main screen, clicking on one of the
+  categories in the left column will cause only questions of that
+  category to be shown.
+  '''
+  @app.route('/categories/<int:category_id>/questions', methods=['GET'])
+  def get_by_category(category_id):
+    questions_by_category = Question.query.filter(Question.category == category_id).all()
+    formatted_questions = pagination_questions(request, questions_by_category)
+    return jsonify({
+      'questions': formatted_questions,
+      'total_questions': len(questions_by_category),
+      'current_category': None
+    })
   #
   # '''
   # @TODO:
