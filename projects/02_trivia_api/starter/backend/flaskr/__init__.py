@@ -205,10 +205,24 @@ def create_app(test_config=None):
     def filter_questions(questions, prev):
         return list(filter(lambda x: (x['id'] not in prev), questions))
 
-    # '''
-    # @TODO:
-    # Create error handlers for all expected errors
-    # including 404 and 422.
-    # '''
+    '''
+    @TODO:
+    Create error handlers for all expected errors
+    including 404 and 422.
+    '''
+    @app.errorhandler(404)
+    def not_found_error(error):
+        return jsonify({
+            "success": False,
+            "error": 404,
+            "message": 'Page not found'
+        }), 404
 
+    @app.errorhandler(422)
+    def not_found_error(error):
+        return jsonify({
+            "success": False,
+            "error": 422,
+            "message": 'Something went wrong. Please check form input'
+        }), 422
     return app
