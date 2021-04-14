@@ -64,7 +64,6 @@ def create_app(test_config=None):
     formatted_questions = pagination_questions(request, all_questions)
     all_category = Category.query.all()
     formatted_category = {c.id: c.type for c in all_category}
-    print(formatted_category)
 
     return jsonify({
       "questions": formatted_questions,
@@ -106,7 +105,6 @@ def create_app(test_config=None):
   '''
   def post_questions(request):
     body = request.get_json()
-    print(body)
     if body['question'] == '' or body['answer'] == '':
       abort(422)
     else:
@@ -122,17 +120,32 @@ def create_app(test_config=None):
       except:
         abort(422)
 
-  # '''
-  # @TODO:
-  # Create a POST endpoint to get questions based on a search term.
-  # It should return any questions for whom the search term
-  # is a substring of the question.
-  #
-  # TEST: Search by any phrase. The questions list will update to include
-  # only question that include that string within their question.
-  # Try using the word "title" to start.
-  # '''
-  #
+  '''
+  @TODO:
+  Create a POST endpoint to get questions based on a search term.
+  It should return any questions for whom the search term
+  is a substring of the question.
+
+  TEST: Search by any phrase. The questions list will update to include
+  only question that include that string within their question.
+  Try using the word "title" to start.
+  '''
+  @app.route('/questions/search', methods=['POST'])
+  def search_question():
+    body = request.get_json()
+    search_term = body['searchTerm']
+    try:
+      questions = Question.query.filter(Question.question.contains(search_term)).all()
+      formatted_questions = pagination_questions(request, questions)
+      return jsonify({
+        'questions': formatted_questions,
+        'totalQuestions': len(formatted_questions),
+        'currentCategory': None
+      })
+    except:
+      abort(422)
+
+
   '''
   @TODO:
   Create a GET endpoint to get questions based on category.
