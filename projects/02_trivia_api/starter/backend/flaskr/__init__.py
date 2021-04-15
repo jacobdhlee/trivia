@@ -91,7 +91,7 @@ def create_app(test_config=None):
         else:
             try:
                 question.delete()
-                return jsonify({"success": True}), 204
+                return jsonify({'success': True})
             except:
                 abort(422)
 
