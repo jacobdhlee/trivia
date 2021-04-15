@@ -87,6 +87,119 @@ GET '/categories'
 '5' : "Entertainment",
 '6' : "Sports"}
 
+GET '/categories/<int: category_id>/questions'
+ - Fetches a questions related category_id
+ - Request Arguments: None
+ - returns: questions list and total_questions
+{
+    "questions": [
+        {
+          "answer": "Maya Angelou", 
+          "category": 4, 
+          "difficulty": 2, 
+          "id": 5, 
+          "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+        }, 
+        {
+          "answer": "Muhammad Ali", 
+          "category": 4, 
+          "difficulty": 1, 
+          "id": 9, 
+          "question": "What boxer's original name is Cassius Clay?"
+        }, 
+    ],
+    "total_questions": 2
+}
+
+GET '/questions?page=1
+
+- Fetches all questions and categories and total questions. each page show 10 questions each.
+- Request Arguments: None
+- returns: An object with categories object, questions list and total_questions 
+
+{
+    "categories": {
+        "1": "Science", 
+        "2": "Art", 
+        "3": "Geography", 
+        "4": "History", 
+        "5": "Entertainment", 
+        "6": "Sports"
+    }, 
+    "questions": [
+        {
+          "answer": "Maya Angelou", 
+          "category": 4, 
+          "difficulty": 2, 
+          "id": 5, 
+          "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+        }, 
+        {
+          "answer": "Muhammad Ali", 
+          "category": 4, 
+          "difficulty": 1, 
+          "id": 9, 
+          "question": "What boxer's original name is Cassius Clay?"
+        }, 
+    ],
+    "total_questions": 17
+}
+
+POST '/questions'
+
+- It add questions 
+- Request Arguments: answer: String, question: String, category: categort.id, difficulty: 1 to 5, all field is required
+  {
+    answer: "Yes"
+    category: "5"
+    difficulty: "2"
+    question: "want to have a house?"
+  }
+  
+  if one or more field is none, it will throw 422 error
+
+- Returns: status code 201 and { "success": true }
+
+
+DELETE '/questions/<int: question_id>'
+- DELETE questions with question_id
+- Request Arguments: None
+- returns status code 200 and { "success": true }
+
+POST '/questions/search'
+- Fetches questions which question string is contains searchTerm
+- Request Arguments: {searchTerm: "car"}
+- Returns status code 200 with list of questions and total_questions
+{
+    "questions": [
+        {
+          "answer": "Apollo 13", 
+          "category": 5, 
+          "difficulty": 4, 
+          "id": 2, 
+          "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+        }
+      ], 
+    "total_questions": 1
+}
+
+
+POST '/quizzes'
+- Fetches random questions related to category user selected and list of previous_questions
+- Request Arguments: 
+  {
+    previous_questions: [],
+    quiz_category: {type: "Science", id: "1"}
+  }
+- Returns with status code 200 and random one question
+{
+    answer: "Blood",
+    category: 1,
+    difficulty: 4,
+    id: 22,
+    question: "Hematology is a branch of medicine involving the study of what?"
+}
+
 ```
 
 
